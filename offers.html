@@ -1,68 +1,90 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-    <title>العروض المتاحة</title>
-      <style>
-          body { 
-                font-family: sans-serif; 
-                      background: #f1f1f1; 
-                            direction: rtl; 
-                                  padding: 20px; 
-                                      }
-                                          .offer {
-                                                background: white; 
-                                                      margin: 10px auto; 
-                                                            padding: 15px;
-                                                                  border-radius: 10px; 
-                                                                        max-width: 500px; 
-                                                                              box-shadow: 0 0 5px rgba(0,0,0,0.1);
-                                                                                  }
-                                                                                      img { 
-                                                                                            max-width: 100%; 
-                                                                                                  border-radius: 5px; 
-                                                                                                      }
-                                                                                                          .title { 
-                                                                                                                font-weight: bold; 
-                                                                                                                      margin-bottom: 5px; 
-                                                                                                                          }
-                                                                                                                              .points { 
-                                                                                                                                    color: green; 
-                                                                                                                                          font-weight: bold; 
-                                                                                                                                              }
-                                                                                                                                                </style>
-                                                                                                                                                </head>
-                                                                                                                                                <body>
-                                                                                                                                                  <h2 style="text-align:center;">العروض المتاحة</h2>
-                                                                                                                                                    <div id="offers"></div>
+  <meta charset="UTF-8" />
+  <title>🟢 عروض النقاط المجانية</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      direction: rtl;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .offer {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px auto;
+      max-width: 400px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .offer:hover {
+      transform: scale(1.02);
+    }
+    img {
+      max-width: 100%;
+      border-radius: 5px;
+    }
+    .title {
+      font-weight: bold;
+      margin: 10px 0 5px;
+      font-size: 18px;
+    }
+    .description {
+      color: #555;
+      margin-bottom: 10px;
+    }
+    .points {
+      color: green;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .button {
+      background: #28a745;
+      color: white;
+      padding: 8px 16px;
+      text-decoration: none;
+      border-radius: 5px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎁 العروض المتاحة</h2>
+  <div id="offers">جاري تحميل العروض...</div>
 
-                                                                                                                                                      <script>
-                                                                                                                                                          fetch("/api/cpa-offers.php")
-                                                                                                                                                                .then(res => res.json())
-                                                                                                                                                                      .then(data => {
-                                                                                                                                                                              const container = document.getElementById("offers");
-                                                                                                                                                                                      if (data && data.offers && data.offers.length > 0) {
-                                                                                                                                                                                                data.offers.forEach(offer => {
-                                                                                                                                                                                                            const div = document.createElement("div");
-                                                                                                                                                                                                                        div.className = "offer";
-                                                                                                                                                                                                                                    div.innerHTML = `
-                                                                                                                                                                                                                                                  <img src="${offer.offerphoto}" alt="offer">
-                                                                                                                                                                                                                                                                <div class="title">${offer.title}</div>
-                                                                                                                                                                                                                                                                              <div>${offer.description || ""}</div>
-                                                                                                                                                                                                                                                                                            <div class="points">+${Math.floor(parseFloat(offer.payout) * 100)} نقطة</div>
-                                                                                                                                                                                                                                                                                                          <a href="${offer.offerlink}" target="_blank"><button>فتح العرض</button></a>
-                                                                                                                                                                                                                                                                                                                      `;
-                                                                                                                                                                                                                                                                                                                                  container.appendChild(div);
-                                                                                                                                                                                                                                                                                                                                            });
-                                                                                                                                                                                                                                                                                                                                                    } else {
-                                                                                                                                                                                                                                                                                                                                                              container.innerHTML = "<p style='text-align:center;'>لا توجد عروض حالياً.</p>";
-                                                                                                                                                                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                                                                                                                                                                            })
-                                                                                                                                                                                                                                                                                                                                                                                  .catch(error => {
-                                                                                                                                                                                                                                                                                                                                                                                          console.error("Error fetching offers:", error);
-                                                                                                                                                                                                                                                                                                                                                                                                  const container = document.getElementById("offers");
-                                                                                                                                                                                                                                                                                                                                                                                                          container.innerHTML = "<p style='text-align:center;'>حدث خطأ أثناء تحميل العروض.</p>";
-                                                                                                                                                                                                                                                                                                                                                                                                                });
-                                                                                                                                                                                                                                                                                                                                                                                                                  </script>
-                                                                                                                                                                                                                                                                                                                                                                                                                  </body>
-                                                                                                                                                                                                                                                                                                                                                                                                                  </html>
+  <script>
+    fetch("https://ffrewards.infinityfreeapp.com/api/cpa-offers.php")
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById("offers");
+        container.innerHTML = "";
+
+        if (data.offers && data.offers.length > 0) {
+          data.offers.forEach(offer => {
+            const div = document.createElement("div");
+            div.className = "offer";
+            div.innerHTML = `
+              <img src="${offer.offerphoto}" alt="Offer Image">
+              <div class="title">${offer.title}</div>
+              <div class="description">${offer.description || ""}</div>
+              <div class="points">+${Math.floor(parseFloat(offer.payout) * 100)} نقطة</div>
+              <a class="button" href="${offer.offerlink}" target="_blank">فتح العرض</a>
+            `;
+            container.appendChild(div);
+          });
+        } else {
+          container.innerHTML = "<p>لا توجد عروض متاحة حالياً.</p>";
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        document.getElementById("offers").innerHTML = "<p>حدث خطأ أثناء تحميل العروض.</p>";
+      });
+  </script>
+</body>
+</html>
