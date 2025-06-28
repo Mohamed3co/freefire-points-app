@@ -1,0 +1,74 @@
+<!-- admin/index.html -->
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+    <title>لوحة الإدارة</title>
+      <style>
+          body { font-family: Arial; background: #f2f2f2; padding: 20px; }
+              table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                  th, td { padding: 10px; border: 1px solid #ccc; text-align: center; }
+                      th { background: #007bff; color: white; }
+                          button { padding: 5px 10px; }
+                            </style>
+                            </head>
+                            <body>
+                              <h2>طلبات السحب</h2>
+                                <table>
+                                    <thead>
+                                          <tr>
+                                                  <th>UID</th>
+                                                          <th>معرف المستخدم</th>
+                                                                  <th>النقاط</th>
+                                                                          <th>التاريخ</th>
+                                                                                  <th>إجراء</th>
+                                                                                        </tr>
+                                                                                            </thead>
+                                                                                                <tbody id="withdrawals-body">
+                                                                                                      <tr><td colspan="5">جاري التحميل...</td></tr>
+                                                                                                          </tbody>
+                                                                                                            </table>
+
+       <script>
+         if (localStorage.getItem("loggedIn") !== "true") {
+             window.location.href = "login.html";
+               }
+               </script>                                                                                                       <script>
+                                                                                                                  function loadWithdrawals() {
+                                                                                                                        fetch('/api/withdrawals')
+                                                                                                                                .then(res => res.json())
+                                                                                                                                        .then(data => {
+                                                                                                                                                  const tbody = document.getElementById('withdrawals-body');
+                                                                                                                                                            tbody.innerHTML = '';
+
+                                                                                                                                                                      if (!data.length) {
+                                                                                                                                                                                  tbody.innerHTML = '<tr><td colspan="5">لا توجد طلبات.</td></tr>';
+                                                                                                                                                                                              return;
+                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                  data.forEach(w => {
+                                                                                                                                                                                                                              const row = document.createElement('tr');
+                                                                                                                                                                                                                                          row.innerHTML = `
+                                                                                                                                                                                                                                                        <td>${w.uid}</td>
+                                                                                                                                                                                                                                                                      <td>${w.userId}</td>
+                                                                                                                                                                                                                                                                                    <td>${w.points}</td>
+                                                                                                                                                                                                                                                                                                  <td>${new Date(w.timestamp).toLocaleString()}</td>
+                                                                                                                                                                                                                                                                                                                <td><button onclick="remove('${w.uid}')">حذف</button></td>
+                                                                                                                                                                                                                                                                                                                            `;
+                                                                                                                                                                                                                                                                                                                                        tbody.appendChild(row);
+                                                                                                                                                                                                                                                                                                                                                  });
+                                                                                                                                                                                                                                                                                                                                                          });
+                                                                                                                                                                                                                                                                                                                                                              }
+
+                                                                                                                                                                                                                                                                                                                                                                  function remove(uid) {
+                                                                                                                                                                                                                                                                                                                                                                        fetch('/api/withdrawals', {
+                                                                                                                                                                                                                                                                                                                                                                                method: 'DELETE',
+                                                                                                                                                                                                                                                                                                                                                                                        headers: { 'Content-Type': 'application/json' },
+                                                                                                                                                                                                                                                                                                                                                                                                body: JSON.stringify({ uid })
+                                                                                                                                                                                                                                                                                                                                                                                                      }).then(() => loadWithdrawals());
+                                                                                                                                                                                                                                                                                                                                                                                                          }
+
+                                                                                                                                                                                                                                                                                                                                                                                                              loadWithdrawals();
+                                                                                                                                                                                                                                                                                                                                                                                                                </script>
+                                                                                                                                                                                                                                                                                                                                                                                                                </body>
+                                                                                                                                                                                                                                                                                                                                                                                                                </html>

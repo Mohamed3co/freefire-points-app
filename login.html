@@ -1,0 +1,33 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+    <title>تسجيل الدخول</title>
+      <link rel="stylesheet" href="style.css">
+      </head>
+      <body>
+        <h2>مرحبًا بك</h2>
+          <form id="loginForm">
+              <label for="username">أدخل اسم المستخدم:</label><br>
+                  <input type="text" id="username" required><br><br>
+                      <button type="submit">دخول</button>
+                        </form>
+
+                          <script>
+                              const form = document.getElementById('loginForm');
+
+                                  form.addEventListener('submit', (e) => {
+                                        e.preventDefault();
+                                              const username = document.getElementById('username').value.trim();
+
+                                                    if (username) {
+                                                            localStorage.setItem('username', username);
+                                                                    window.location.href = 'index.html'; // ينتقل إلى الصفحة الرئيسية بعد تسجيل الاسم
+                                                                          } else {
+                                                                                  alert('الرجاء إدخال اسم المستخدم');
+                                                                                        }
+                                                                                            });
+                                                                                              </script>
+                                                                                              </body>
+                                                                                              </html>

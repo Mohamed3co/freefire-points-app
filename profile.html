@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+    <title>ملفي الشخصي</title>
+      <style>
+          body { font-family: sans-serif; direction: rtl; padding: 20px; background: #f1f1f1; }
+              .card {
+                    background: white; padding: 30px; border-radius: 10px;
+                          max-width: 400px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                              }
+                                  h2, p { text-align: center; }
+                                      #points { font-size: 24px; color: green; }
+                                        </style>
+                                        </head>
+                                        <body>
+                                          <div class="card">
+                                              <h2>مرحبًا بك يا <span id="username">...</span></h2>
+                                                  <p>رصيد نقاطك الحالي:</p>
+                                                      <p id="points">0</p>
+                                                        </div>
+
+                                                          <script type="module">
+                                                              import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+                                                                  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+                                                                      const firebaseConfig = {
+                                                                            apiKey: "AIzaSyDPYvYGM4iXxnyvqIFQW1gfU1OGz_XXX", // تأكد منه إذا تغيّر
+                                                                                  authDomain: "freefirerewardsdz-69572.firebaseapp.com",
+                                                                                        projectId: "freefirerewardsdz-69572",
+                                                                                              storageBucket: "freefirerewardsdz-69572.appspot.com",
+                                                                                                    messagingSenderId: "145782934523",
+                                                                                                          appId: "1:145782934523:web:76a2f7c4d2e37f94d6595e"
+                                                                                                              };
+
+                                                                                                                  const app = initializeApp(firebaseConfig);
+                                                                                                                      const db = getFirestore(app);
+
+                                                                                                                          // نجيب المعرف من التخزين المحلي
+                                                                                                                              const userId = localStorage.getItem("userId") || "testUser";
+
+                                                                                                                                  const docRef = doc(db, "users", userId);
+                                                                                                                                      const docSnap = await getDoc(docRef);
+
+                                                                                                                                          if (docSnap.exists()) {
+                                                                                                                                                const data = docSnap.data();
+                                                                                                                                                      document.getElementById("username").textContent = data.userId;
+                                                                                                                                                            document.getElementById("points").textContent = data.points;
+                                                                                                                                                                } else {
+                                                                                                                                                                      alert("المستخدم غير موجود.");
+                                                                                                                                                                          }
+                                                                                                                                                                            </script>
+                                                                                                                                                                            </body>
+                                                                                                                                                                            </html>

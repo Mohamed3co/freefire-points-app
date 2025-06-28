@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+    <title>طلبات السحب</title>
+      <style>
+          body { font-family: sans-serif; direction: rtl; padding: 30px; background: #f7f7f7; }
+              h2 { text-align: center; }
+                  table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+                      th, td { padding: 10px; border: 1px solid #ccc; text-align: center; }
+                          button { padding: 5px 15px; }
+                            </style>
+                            </head>
+                            <body>
+                              <h2>لوحة التحكم - طلبات السحب</h2>
+                                <table>
+                                    <thead>
+                                          <tr>
+                                                  <th>المستخدم</th>
+                                                          <th>التاريخ</th>
+                                                                  <th>الحالة</th>
+                                                                          <th>إجراءات</th>
+                                                                                </tr>
+                                                                                    </thead>
+                                                                                        <tbody id="withdrawalsBody"></tbody>
+                                                                                          </table>
+
+                                                                                            <script type="module">
+                                                                                                import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+                                                                                                    import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+                                                                                                        const firebaseConfig = {
+                                                                                                              apiKey: "AIzaSyDPYvYGM4iXxnyvqIFQW1gfU1OGz_XXX", // استبدلها إذا لزم الأمر
+                                                                                                                    authDomain: "freefirerewardsdz-69572.firebaseapp.com",
+                                                                                                                          projectId: "freefirerewardsdz-69572",
+                                                                                                                                storageBucket: "freefirerewardsdz-69572.appspot.com",
+                                                                                                                                      messagingSenderId: "145782934523",
+                                                                                                                                            appId: "1:145782934523:web:76a2f7c4d2e37f94d6595e"
+                                                                                                                                                };
+
+                                                                                                                                                    const app = initializeApp(firebaseConfig);
+                                                                                                                                                        const db = getFirestore(app);
+
+                                                                                                                                                            const tbody = document.getElementById("withdrawalsBody");
+
+                                                                                                                                                                async function loadWithdrawals() {
+                                                                                                                                                                      const querySnapshot = await getDocs(collection(db, "withdrawals"));
+                                                                                                                                                                            tbody.innerHTML = "";
+
+                                                                                                                                                                                  querySnapshot.forEach(docSnap => {
+                                                                                                                                                                                          const data = docSnap.data();
+                                                                                                                                                                                                  const tr = document.createElement("tr");
+                                                                                                                                                                                                          tr.innerHTML = `
+                                                                                                                                                                                                                    <td>${data.userId}</td>
+                                                                                                                                                                                                                              <td>${new Date(data.timestamp.toDate()).toLocaleString()}</td>
+                                                                                                                                                                                                                                        <td>${data.status}</td>
+                                                                                                                                                                                                                                                  <td>
+                                                                                                                                                                                                                                                              ${data.status === "pending" ? `<button onclick="approve('${docSnap.id}')">تم</button>` : "تم السحب"}
+                                                                                                                                                                                                                                                                        </td>
+                                                                                                                                                                                                                                                                                `;
+                                                                                                                                                                                                                                                                                        tbody.appendChild(tr);
+                                                                                                                                                                                                                                                                                              });
+                                                                                                                                                                                                                                                                                                  }
+
+                                                                                                                                                                                                                                                                                                      window.approve = async (id) => {
+                                                                                                                                                                                                                                                                                                            const ref = doc(db, "withdrawals", id);
+                                                                                                                                                                                                                                                                                                                  await updateDoc(ref, { status: "approved" });
+                                                                                                                                                                                                                                                                                                                        alert("تمت الموافقة على السحب");
+                                                                                                                                                                                                                                                                                                                              loadWithdrawals();
+                                                                                                                                                                                                                                                                                                                                  };
+
+                                                                                                                                                                                                                                                                                                                                      loadWithdrawals();
+                                                                                                                                                                                                                                                                                                                                        </script>
+                                                                                                                                                                                                                                                                                                                                        </body>
+                                                                                                                                                                                                                                                                                                                                        </html>

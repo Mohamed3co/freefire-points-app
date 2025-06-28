@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+    <title>تسجيل الدخول - لوحة التحكم</title>
+      <style>
+          body { font-family: sans-serif; text-align: center; margin-top: 100px; }
+              input, button { padding: 10px; margin: 5px; }
+                </style>
+                </head>
+                <body>
+                  <h2>تسجيل الدخول</h2>
+                    <input type="text" id="username" placeholder="اسم المستخدم"><br>
+                      <input type="password" id="password" placeholder="كلمة المرور"><br>
+                        <button onclick="login()">دخول</button>
+
+                          <script>
+                              function login() {
+                                    const username = document.getElementById('username').value;
+                                          const password = document.getElementById('password').value;
+
+                                                // بيانات تسجيل الدخول (ثابتة)
+                                                      if (username === "admin" && password === "admin123") {
+                                                              localStorage.setItem("loggedIn", "true");
+                                                                      window.location.href = "index.html";
+                                                                            } else {
+                                                                                    alert("اسم المستخدم أو كلمة المرور غير صحيحة.");
+                                                                                          }
+                                                                                              }
+                                                                                                </script>
+                                                                                                </body>
+                                                                                                </html>

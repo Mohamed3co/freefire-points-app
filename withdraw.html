@@ -1,0 +1,58 @@
+<!-- withdraw.html -->
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+    <title>طلب سحب الجواهر</title>
+      <link rel="stylesheet" href="style.css">
+      </head>
+      <body>
+        <h2>طلب سحب الجواهر</h2>
+          <form id="withdrawForm">
+              <label for="username">اسم المستخدم:</label><br>
+                  <input type="text" id="username" name="username" required><br><br>
+
+                      <label for="freefire_id">معرف فري فاير:</label><br>
+                          <input type="text" id="freefire_id" name="freefire_id" required><br><br>
+
+                              <button type="submit">طلب السحب</button>
+                                </form>
+
+                                  <p id="message" style="color: green;"></p>
+
+                                    <script type="module">
+                                        import { db } from './api/firebase.js';
+                                            import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-lite.js';
+
+                                                const form = document.getElementById('withdrawForm');
+                                                    const message = document.getElementById('message');
+
+                                                        form.addEventListener('submit', async (e) => {
+                                                              e.preventDefault();
+                                                                    const username = document.getElementById('username').value.trim();
+                                                                          const freefire_id = document.getElementById('freefire_id').value.trim();
+
+                                                                                if (!username || !freefire_id) {
+                                                                                        message.textContent = "يرجى تعبئة جميع الحقول.";
+                                                                                                return;
+                                                                                                      }
+
+                                                                                                            try {
+                                                                                                                    await addDoc(collection(db, "withdrawals"), {
+                                                                                                                              username,
+                                                                                                                                        freefire_id,
+                                                                                                                                                  status: "معلق",
+                                                                                                                                                            date: new Date().toISOString()
+                                                                                                                                                                    });
+
+                                                                                                                                                                            message.textContent = "تم إرسال الطلب بنجاح. سيتم مراجعته قريبًا.";
+                                                                                                                                                                                    form.reset();
+                                                                                                                                                                                          } catch (error) {
+                                                                                                                                                                                                  message.style.color = "red";
+                                                                                                                                                                                                          message.textContent = "حدث خطأ أثناء الإرسال. حاول مجددًا.";
+                                                                                                                                                                                                                  console.error(error);
+                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                            });
+                                                                                                                                                                                                                              </script>
+                                                                                                                                                                                                                              </body>
+                                                                                                                                                                                                                              </html>
